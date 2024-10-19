@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Registration</title>
+  <style>
+    form { width: 300px; margin: auto; padding: 1em; border: 1px solid #ccc; }
+    input { width: 100%; margin: 0.5em 0; }
+  </style>
+</head>
+<body>
+  <h2>Register User</h2>
+  <form id="registrationForm">
+    <input type="text" id="name" placeholder="Name" required />
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <input type="date" id="dob" required />
+    <input type="text" id="phone" placeholder="Phone Number" />
+    <input type="text" id="address" placeholder="Address" />
+    <button type="submit">Register</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('registrationForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const data = {
+        Name: form.name.value,
+        Email: form.email.value,
+        Password: form.password.value,
+        DateOfBirth: form.dob.value,
+        PhoneNumber: form.phone.value,
+        Address: form.address.value,
+      };
+
+      try {
+        const response = await fetch('http://localhost:5000/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+          alert('User registered successfully!');
+          form.reset();
+        } else {
+          const error = await response.json();
+          alert(`Error: ${error.error}`);
+        }
+      } catch (err) {
+        alert('Failed to connect to server.');
+      }
+    });
+  </script>
+</body>
+</html>
